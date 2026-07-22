@@ -1,0 +1,24 @@
+{
+  "fixture_id": "commercial-permit-synthetic",
+  "expected": {
+    "fields": ["project_square_footage", "occupancy_type"],
+    "actors": ["Permit Technician", "Building Division", "Fire Prevention"],
+    "requirements": ["complete application", "site plan"],
+    "critical_rules": ["completeness_before_review"],
+    "fees": [{ "inputs": { "square_feet": 2001 }, "expected_minor_units": 50025 }],
+    "source_pages": [1, 2],
+    "conflicts": ["commercial_plan_review_fee"],
+    "missing_references": ["municipal_code_18.42"]
+  },
+  "actual": {
+    "fields": ["project_square_footage", "occupancy_type"],
+    "actors": ["Permit Technician", "Building Division", "Fire Prevention"],
+    "requirements": ["complete application", "site plan"],
+    "critical_rules": ["completeness_before_review"],
+    "fees": [{ "inputs": { "square_feet": 2001 }, "actual_minor_units": 50025 }],
+    "source_pages": [1, 2],
+    "conflicts": ["commercial_plan_review_fee"],
+    "missing_references": ["municipal_code_18.42"],
+    "unsupported_claims": []
+  }
+}

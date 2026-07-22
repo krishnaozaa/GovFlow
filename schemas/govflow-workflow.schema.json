@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://govflow.example/schemas/govflow-workflow.schema.json",
+  "title": "Canonical GovFlow Workflow",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "workflow_id", "project_id", "title", "jurisdiction", "sources", "actors", "fields", "requirements", "statuses", "workflow", "decision_rules", "fee_rules", "deadlines", "issues", "metadata"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "workflow_id": { "type": "string", "minLength": 1 },
+    "project_id": { "type": "string", "minLength": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "jurisdiction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "country"],
+      "properties": {
+        "name": { "type": "string" },
+        "state_or_region": { "type": "string" },
+        "country": { "type": "string" }
+      }
+    },
+    "sources": { "type": "array", "items": { "$ref": "#/$defs/source" } },
+    "actors": { "type": "array", "items": { "$ref": "#/$defs/materialObject" } },
+    "fields": { "type": "array", "items": { "$ref": "#/$defs/field" } },
+    "requirements": { "type": "array", "items": { "$ref": "#/$defs/materialObject" } },
+    "statuses": { "type": "array", "items": { "$ref": "#/$defs/materialObject" } },
+    "workflow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["nodes", "edges"],
+      "properties": {
+        "nodes": { "type": "array", "items": { "$ref": "#/$defs/node" } },
+        "edges": { "type": "array", "items": { "$ref": "#/$defs/edge" } }
+      }
+    },
+    "decision_rules": { "type": "array", "items": { "$ref": "rule-expression.schema.json" } },
+    "fee_rules": { "type": "array", "items": { "$ref": "#/$defs/feeRule" } },
+    "deadlines": { "type": "array", "items": { "$ref": "#/$defs/materialObject" } },
+    "issues": { "type": "array", "items": { "$ref": "#/$defs/issue" } },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["created_at", "pipeline_version", "prompt_version", "model_runs"],
+      "properties": {
+        "created_at": { "type": "string", "format": "date-time" },
+        "pipeline_version": { "type": "string" },
+        "prompt_version": { "type": "string" },
+        "model_runs": { "type": "array", "items": { "type": "object" } }
+      }
+    }
+  },
+  "$defs": {
+    "origin": { "enum": ["explicit", "inferred", "user_added", "unknown", "conflicted"] },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["document_version_id", "page_number", "bbox", "text", "text_start", "text_end", "source_hash", "extraction_method"],
+      "properties": {
+        "document_version_id": { "type": "string", "minLength": 1 },
+        "page_number": { "type": "integer", "minimum": 1 },
+        "bbox": { "type": "array", "prefixItems": [{"type":"number","minimum":0,"maximum":1},{"type":"number","minimum":0,"maximum":1},{"type":"number","minimum":0,"maximum":1},{"type":"number","minimum":0,"maximum":1}], "items": false },
+        "text": { "type": "string", "minLength": 1, "maxLength": 4000 },
+        "text_start": { "type": "integer", "minimum": 0 },
+        "text_end": { "type": "integer", "minimum": 0 },
+        "source_hash": { "type": "string", "minLength": 8 },
+        "extraction_method": { "enum": ["native_text", "acroform", "ocr", "vision", "html", "csv", "user"] }
+      }
+    },
+    "materialObject": {
+      "type": "object",
+      "required": ["id", "name", "origin", "confidence", "evidence"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "origin": { "$ref": "#/$defs/origin" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } }
+      }
+    },
+    "field": {
+      "allOf": [
+        { "$ref": "#/$defs/materialObject" },
+        {
+          "type": "object",
+          "required": ["key", "label", "type", "required_status"],
+          "properties": {
+            "key": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+            "label": { "type": "string" },
+            "type": { "enum": ["string", "multiline_text", "integer", "decimal", "money", "boolean", "date", "datetime", "email", "phone", "address", "parcel_identifier", "person", "organization", "enum", "multiselect", "file_upload", "signature", "calculated", "unknown"] },
+            "required_status": { "enum": ["explicitly_required", "conditionally_required", "apparently_optional", "unknown"] }
+          }
+        }
+      ]
+    },
+    "node": {
+      "allOf": [
+        { "$ref": "#/$defs/materialObject" },
+        {
+          "type": "object",
+          "required": ["kind", "actor_id", "position"],
+          "properties": {
+            "kind": { "enum": ["start", "applicant_form", "validation", "completeness_review", "staff_task", "department_review", "decision", "parallel_split", "parallel_join", "payment", "inspection", "timer", "notification", "public_hearing", "approval", "denial", "resubmission", "end"] },
+            "actor_id": { "type": ["string", "null"] },
+            "position": { "type": "object", "required": ["x", "y"], "properties": { "x": {"type":"number"}, "y":{"type":"number"} } }
+          }
+        }
+      ]
+    },
+    "edge": {
+      "type": "object",
+      "required": ["id", "source", "target"],
+      "properties": {
+        "id": { "type": "string" },
+        "source": { "type": "string" },
+        "target": { "type": "string" },
+        "label": { "type": "string" },
+        "condition": { "$ref": "rule-expression.schema.json" },
+        "intentional_loop": { "type": "boolean", "default": false }
+      }
+    },
+    "feeRule": {
+      "allOf": [
+        { "$ref": "#/$defs/materialObject" },
+        {
+          "type": "object",
+          "required": ["currency", "inputs", "calculation", "rounding_mode", "effective_start"],
+          "properties": {
+            "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+            "inputs": { "type": "array", "items": { "type": "string" } },
+            "calculation": { "$ref": "rule-expression.schema.json" },
+            "rounding_mode": { "enum": ["half_up", "half_even", "up", "down"] },
+            "effective_start": { "type": "string", "format": "date" },
+            "effective_end": { "type": ["string", "null"], "format": "date" }
+          }
+        }
+      ]
+    },
+    "source": {
+      "type": "object",
+      "required": ["document_version_id", "title", "sha256"],
+      "properties": {
+        "document_version_id": { "type": "string" },
+        "title": { "type": "string" },
+        "sha256": { "type": "string" },
+        "classification": { "type": "string" }
+      }
+    },
+    "issue": {
+      "type": "object",
+      "required": ["id", "severity", "type", "status", "detail"],
+      "properties": {
+        "id": { "type": "string" },
+        "severity": { "enum": ["informational", "warning", "blocking", "fatal"] },
+        "type": { "type": "string" },
+        "status": { "enum": ["open", "resolved", "dismissed"] },
+        "detail": { "type": "string" }
+      }
+    }
+  }
+}

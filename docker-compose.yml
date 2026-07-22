@@ -1,0 +1,39 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/web.Dockerfile
+    environment:
+      NEXT_PUBLIC_API_URL: http://localhost:8000
+    ports:
+      - "${WEB_PORT:-3000}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://127.0.0.1:3000/"]
+      interval: 10s
+      timeout: 3s
+      retries: 8
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    environment:
+      GOVFLOW_DATA_DIR: /data
+      GOVFLOW_ALLOWED_ORIGINS: http://localhost:${WEB_PORT:-3000}
+      GOVFLOW_EXTRACTION_PROVIDER: ${GOVFLOW_EXTRACTION_PROVIDER:-deterministic-mock}
+      GOVFLOW_EXTRACTION_MODEL: ${GOVFLOW_EXTRACTION_MODEL:-gpt-5-mini}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    volumes:
+      - govflow_data:/data
+    ports:
+      - "${API_PORT:-8000}:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')"]
+      interval: 10s
+      timeout: 3s
+      retries: 8
+
+volumes:
+  govflow_data:

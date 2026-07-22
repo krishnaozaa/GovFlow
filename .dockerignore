@@ -1,0 +1,12 @@
+.git
+.next
+.wrangler
+dist
+node_modules
+services/api/.venv
+**/__pycache__
+**/.pytest_cache
+.env
+evals/report.json
+evals/report.md
+GovFlow

@@ -1,0 +1,108 @@
+- id: city-of-geneva-building-permit
+  title: City of Geneva — Application for a Building Permit
+  source_organization: City of Geneva
+  source_page: https://www.geneva.il.us/
+  download_url: null
+  retrieved_at: null
+  expected_mime_type: application/pdf
+  sha256: null
+  license_or_terms_notes: Verify municipal terms before downloading or redistributing.
+  redistribution_allowed: false
+  document_type: application_form
+  expected_features: [form_fields, signatures, requirements]
+- id: richmond-2025-conditional-use
+  title: City of Richmond — 2025 Conditional Use Permit Application
+  source_organization: City of Richmond
+  source_page: https://www.ci.richmond.ca.us/
+  download_url: null
+  retrieved_at: null
+  expected_mime_type: application/pdf
+  sha256: null
+  license_or_terms_notes: Manifest only; CI does not download external material.
+  redistribution_allowed: false
+  document_type: application_form
+  expected_features: [conditional_requirements, fees]
+- id: bainbridge-commercial-submittals
+  title: City of Bainbridge Island — Commercial Building Permit Application Submittals
+  source_organization: City of Bainbridge Island
+  source_page: https://www.bainbridgewa.gov/
+  download_url: null
+  retrieved_at: null
+  expected_mime_type: application/pdf
+  sha256: null
+  license_or_terms_notes: Manifest only.
+  redistribution_allowed: false
+  document_type: submission_checklist
+  expected_features: [attachments, parallel_reviews]
+- id: fort-worth-development-fees
+  title: City of Fort Worth — Development Fees Schedule
+  source_organization: City of Fort Worth
+  source_page: https://www.fortworthtexas.gov/
+  download_url: null
+  retrieved_at: null
+  expected_mime_type: application/pdf
+  sha256: null
+  license_or_terms_notes: Manifest only.
+  redistribution_allowed: false
+  document_type: fee_schedule
+  expected_features: [tiers, effective_dates, formulas]
+- id: austin-dsd-forms
+  title: Austin Development Services application forms and review checklists
+  source_organization: City of Austin
+  source_page: https://www.austintexas.gov/department/development-services
+  download_url: null
+  retrieved_at: null
+  expected_mime_type: application/pdf
+  sha256: null
+  license_or_terms_notes: Multiple documents; optional retrieval requires explicit selection.
+  redistribution_allowed: false
+  document_type: unknown
+  expected_features: [forms, checklists, inspections]
+- id: irs-1040-and-instructions
+  title: IRS Form 1040 and corresponding instructions
+  source_organization: Internal Revenue Service
+  source_page: https://www.irs.gov/forms-pubs/about-form-1040
+  download_url: null
+  retrieved_at: null
+  expected_mime_type: application/pdf
+  sha256: null
+  license_or_terms_notes: US federal work; verify current revision and terms.
+  redistribution_allowed: false
+  document_type: application_form
+  expected_features: [acroform, dense_instructions, cross_references]
+- id: funsd
+  title: FUNSD
+  source_organization: RVL-CDIP / academic dataset
+  source_page: https://guillaumejaume.github.io/FUNSD/
+  download_url: null
+  retrieved_at: null
+  expected_mime_type: application/zip
+  sha256: null
+  license_or_terms_notes: Optional integration subject to dataset license.
+  redistribution_allowed: false
+  document_type: unknown
+  expected_features: [forms, bounding_boxes]
+- id: xfund
+  title: XFUND
+  source_organization: Microsoft Research
+  source_page: https://github.com/doc-analysis/XFUND
+  download_url: null
+  retrieved_at: null
+  expected_mime_type: application/zip
+  sha256: null
+  license_or_terms_notes: Optional integration subject to repository license.
+  redistribution_allowed: false
+  document_type: unknown
+  expected_features: [multilingual_forms, bounding_boxes]
+- id: docvqa
+  title: DocVQA
+  source_organization: DocVQA
+  source_page: https://www.docvqa.org/
+  download_url: null
+  retrieved_at: null
+  expected_mime_type: application/zip
+  sha256: null
+  license_or_terms_notes: Optional; never required by CI.
+  redistribution_allowed: false
+  document_type: unknown
+  expected_features: [document_questions, layouts]

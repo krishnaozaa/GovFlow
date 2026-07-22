@@ -1,0 +1,4 @@
+fee_name,kind,amount,unit,effective_start,condition
+Commercial plan review,minimum,500.00,USD,2025-01-01,
+Commercial plan review,per_unit,0.25,square_foot,2025-01-01,
+Revision review,percentage,50,percent,2025-01-01,revision_number >= 2

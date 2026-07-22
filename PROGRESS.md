@@ -65,6 +65,7 @@ Missing production capabilities at assessment time included every requested area
 - `npm run lint` — passes without warnings.
 - API unit/integration/security suite — 13 tests pass.
 - Evaluation harness — emits JSON and Markdown without network or paid calls.
+- Runtime dependency audit — zero critical/high advisories after pinned transitive overrides.
 
 ## Architectural deviations
 

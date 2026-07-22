@@ -83,7 +83,7 @@ function OriginPill({ origin }: { origin: Origin }) {
 
 function Workspace() {
   const [nodes, setNodes, onNodesChange] = useNodesState<FlowNode>(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges as Edge[]);
   const [issues, setIssues] = useState<ReviewIssue[]>(initialIssues);
   const [selectedId, setSelectedId] = useState("payment");
   const [activeSource, setActiveSource] = useState("FY2025 Development Fees.csv");
